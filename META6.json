@@ -1,0 +1,20 @@
+{
+    "perl"         : "6.c",
+    "name"         : "p6lert",
+    "license"      : "Artistic-2.0",
+    "version"      : "1.001001",
+    "description"  : "Code for alerts.perl6.org and supporting IRC bot",
+    "tags"         : [ "core dev" ],
+    "depends"      : [
+        "DBIish",
+        "Subset::Helper"
+    ],
+    "test-depends" : [
+        "Testo",
+        "Temp::Path"
+    ],
+    "provides"     : {
+    },
+    "authors"       : ["Zoffix Znet"],
+    "support"       : {"source"   : "https://github.com/perl6/alerts.git"}
+}
