@@ -1,0 +1,116 @@
+// http://www.colourlovers.com/palette/1289567/learn
+$color1: #F3F1AF;
+$color2: #F9420A;
+$color3: #AECBEB;
+$color4: #FFFFFF;
+$color5: #2B2B2B;
+
+$page-bg: lighten($color1, 10%);
+$alert-info-bg: $color3;
+$alert-normal-bg: $color1;
+$alert-critical-bg: $color2;
+$alert-critical-fg: $color4;
+$border-color: lighten($color5, 70%);
+$muted-text: lighten($color5, 30%);
+$text-color: $color5;
+
+$radius: 4px;
+
+
+body {
+    background: $page-bg;
+    color: $text-color;
+    padding: 0 20px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#content {
+    margin: 10px auto;
+    max-width: 1100px;
+}
+
+code, kbd, pre, samp {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+h1 {
+    font-size: 140%;
+    letter-spacing: -1px;
+    font-weight: normal;
+
+    a {
+        text-decoration: none;
+        color: $text-color;
+    }
+
+    a:nth-child(3) {
+        margin-left: 8px;
+    }
+    img {
+        margin: 0 5px;
+        vertical-align: top;
+    }
+
+    small {
+        font-size: 70%;
+        color: $muted-text;
+        vertical-align: middle;
+        margin-left: 10px;
+    }
+}
+
+footer, footer * {
+    color: $muted-text;
+}
+
+#alerts {
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
+
+    .alert {
+        padding: 0;
+        margin-bottom: 20px;
+        background: $color4;
+        border: 1px solid $border-color;
+        border-radius: $radius;
+        box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, .05);
+
+        a {
+            color: $text-color;
+        }
+
+        h2 {
+            margin: 0;
+            border-radius: $radius $radius 0 0;
+            padding: 20px;
+            border-bottom: 1px solid $border-color;
+            font-weight: normal;
+            font-size: 90%;
+            background: $alert-normal-bg;
+
+            .sep {
+                font-weight: normal;
+                font-size: 70%;
+                vertical-align: 20%;
+                color: $muted-text;
+            }
+            span {
+                font-weight: bold;
+            }
+        }
+
+        p {
+            padding: 20px;
+            margin: 0;
+        }
+    }
+
+    .alert-info h2 { background: $alert-info-bg }
+    .alert-critical {
+        h2, h2 *, h2 .sep {
+            background: $alert-critical-bg;
+            color: $alert-critical-fg;
+        }
+    }
+}

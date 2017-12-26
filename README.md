@@ -2,6 +2,15 @@
 
 Code for alerts.perl6.org and supporting IRC bot
 
+## DEVELOPMENT
+
+### Website styles
+
+The styles are in `static/main.scss`. You'll need to run `./sassify` to
+have [SASS preprocessor](http://sass-lang.com/) watch for changes and
+generate CSS styles for the site.
+
+
 ----
 
 #### REPOSITORY

@@ -12,5 +12,5 @@ has Str:D      $.affects  is required;
 has Severity:D $.severity is required;
 
 method time-human {
-    DateTime.new: $!time
+    DateTime.new($!time).Date
 }

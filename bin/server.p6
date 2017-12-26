@@ -14,7 +14,11 @@ sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
         get -> 'alert', Int $id {
             content 'text/html', html-render-alerts $Alerts.get: $id
         }
-        get -> 'main.css' { static 'static/main.css' }#$CSS }
+        get -> 'main.css'    { static 'static/main.css'    }
+        get -> 'rss.svg'     { static 'static/rss.svg'     }
+        get -> 'api.svg'     { static 'static/api.svg'     }
+        get -> 'twitter.svg' { static 'static/twitter.svg' }
+        get -> 'camelia.svg' { static 'static/camelia.svg' }
     }
 
     with Cro::HTTP::Server.new: :$host, :$port, :$application {
@@ -32,11 +36,19 @@ sub html-render-alerts(*@alerts) {
       ~ @alerts.map(-> $a {
           q:to/✎✎✎✎✎/;
           <li class="alert alert-\qq[$a.severity()]">
-            <p class="info"><a href="/alert/\qq[$a.id()]">#\qq[$a.id()]</a>
-              | \qq[$a.time-human()]
-              | posted by \qq[$a.creator()]
-              | severity: \qq[$a.severity()]
-              \qq[{"| affects: $a.affects()" if $a.affects}]
+            <h2 class="info"><a href="/alert/\qq[$a.id()]">#\qq[$a.id()]</a>
+              <span class="sep">|</span>
+                <span class="time">\qq[$a.time-human()]</span>
+              <span class="sep">|</span>
+                severity: <span class="severity">\qq[$a.severity()]</span>
+              \qq[{
+                  '<span class="sep">|</span>
+                    affects: <span class="affects">\qq[$a.affects()]</span>'
+                  if $a.affects
+              }]
+              <span class="sep">|</span>
+                posted by <span class="creator">\qq[$a.creator()]</span>
+            </h2>
 
             <p>\qq[$a.alert()]</p>
           </li>
@@ -57,14 +69,23 @@ sub html-layout-default (Str:D $content) {
       <link rel="stylesheet" href="/main.css">
     </head>
     <body>
-      <h1>Perl 6 Alerts</h1>
       <div id="content">
+        <h1>
+          <a href="https://perl6.org/"><img src="/camelia.svg" alt="»ö«"
+            width=25 height=25></a>
+          <a href="/">Perl 6 Alerts</a>
+          <a href="/rss"><img src="/rss.svg" alt="RSS" width=25 height=25></a>
+          <a href="https://twitter.com/p6lert"
+            ><img src="/twitter.svg" alt="Twitter" width=25 height=25></a>
+          <a href="/api"
+            ><img src="/api.svg" alt="API" width=25 height=25></a
+          ><small>keeping up to date with important changes</small></h1>
         \qq[$content]
+        <footer>
+          <small>Code for this website is available at
+          <a href="https://github.com/perl6/alerts">github.com/perl6/alerts</a>
+        </footer>
       </div>
-      <footer>
-        <small>Code for this website is available at
-        <a href="https://github.com/perl6/alerts">github.com/perl6/alerts</a>
-      </footer>
     </body>
     </html>
     ✎✎✎✎✎

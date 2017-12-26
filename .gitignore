@@ -1,2 +1,4 @@
 /lib/.precomp
 /alerts.sqlite.db
+/static/main.css
+/static/.sass-cache/
