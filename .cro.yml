@@ -1,0 +1,6 @@
+---
+name: hello
+cro: 1
+id: hello
+entrypoint: bin/server.p6
+...

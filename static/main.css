@@ -1,0 +1,32 @@
+
+body {
+    margin: 10px auto;
+    max-width: 1100px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#content {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+
+code, kbd, pre, samp {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+h1 {
+    font-size: 120%;
+    font-weight: normal;
+}
+
+footer, footer * {
+    color: #999;
+}
+
+#alerts {
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
+}

@@ -6,6 +6,7 @@
     "description"  : "Code for alerts.perl6.org and supporting IRC bot",
     "tags"         : [ "core dev" ],
     "depends"      : [
+        "Cro",
         "DBIish",
         "Subset::Helper"
     ],

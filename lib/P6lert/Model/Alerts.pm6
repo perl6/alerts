@@ -50,6 +50,15 @@ method all {
     }
 }
 
+method get (UInt:D $id) {
+    given $!dbh.prepare: ｢SELECT * FROM alerts where id = ?｣ {
+        LEAVE .finish;
+        .execute: $id;
+        if .row: :hash { P6lert::Alert.new: |$^alert }
+        else { Empty }
+    }
+}
+
 method delete (UInt:D $id) {
     given $!dbh.prepare: ｢DELETE FROM alerts WHERE id = ?｣ {
         .execute: $id;

@@ -10,3 +10,7 @@ has UInt:D     $.time     is required;
 has Str:D      $.creator  is required;
 has Str:D      $.affects  is required;
 has Severity:D $.severity is required;
+
+method time-human {
+    DateTime.new: $!time
+}
