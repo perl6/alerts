@@ -14,3 +14,5 @@ has Severity:D $.severity is required;
 method time-human {
     DateTime.new($!time).Date
 }
+
+method TO-JSON { self.Capture }

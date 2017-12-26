@@ -1,19 +1,34 @@
 use lib <lib>;
 use Cro::HTTP::Router;
 use Cro::HTTP::Server;
+use JSON::Fast;
 use P6lert::Model::Alerts;
 
 my $Alerts := P6lert::Model::Alerts.new;
-# my $CSS := $*PROGRAM.sibling('../assets/main.css').absolute;
 
 sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
     my $application = route {
         get -> {
             content 'text/html', html-render-alerts $Alerts.all
         }
-        get -> 'alert', Int $id {
+        get -> 'alert', UInt $id {
             content 'text/html', html-render-alerts $Alerts.get: $id
         }
+
+        get -> 'api', 'v1', 'all' {
+            content 'application/json', to-json {
+                alerts => $Alerts.all».TO-JSON,
+            };
+        }
+
+        get -> 'api', 'v1', 'alert', UInt $id {
+            if $Alerts.get: $id -> $alert {
+                content 'application/json', to-json %(
+                    alert => $alert.TO-JSON
+                )
+            } else { not-found }
+        }
+
         get -> 'main.css'    { static 'static/main.css'    }
         get -> 'rss.svg'     { static 'static/rss.svg'     }
         get -> 'api.svg'     { static 'static/api.svg'     }
