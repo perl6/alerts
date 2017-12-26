@@ -42,8 +42,8 @@ method add (
     }
 }
 
-method all { #  ORDER BY time DESC
-    given $!dbh.prepare: ｢SELECT * FROM alerts｣ {
+method all {
+    given $!dbh.prepare: ｢SELECT * FROM alerts ORDER BY time DESC｣ {
         LEAVE .finish;
         .execute;
         eager .allrows(:array-of-hash).map: { P6lert::Alert.new: |$_ }
