@@ -28,10 +28,11 @@ method add (
     P6lert::Alert::Severity:D :$severity = 'normal'
 ) {
     given $!dbh.prepare: ｢
-        INSERT INTO alerts (alert, severity, creator, time) VALUES(?, ?, ?, ?)
+        INSERT INTO alerts (alert, severity, affects, creator, time)
+            VALUES(?, ?, ?, ?, ?)
     ｣ {
         LEAVE .finish;
-        .execute: $alert, $severity, $creator, time;
+        .execute: $alert, $severity, $affects, $creator, time;
     }
 
     given $!dbh.prepare: ｢SELECT last_insert_rowid()｣ {
