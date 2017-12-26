@@ -3,6 +3,7 @@ use DBIish;
 use P6lert::Alert;
 
 has IO::Path:D $.db-file = 'alerts.sqlite.db'.IO;
+has UInt $.public-delay  = 60*10; # delay before making messages public
 has $!dbh;
 
 submethod TWEAK {
@@ -46,6 +47,16 @@ method all {
     given $!dbh.prepare: ｢SELECT * FROM alerts ORDER BY time DESC｣ {
         LEAVE .finish;
         .execute;
+        eager .allrows(:array-of-hash).map: { P6lert::Alert.new: |$_ }
+    }
+}
+
+method public {
+    given $!dbh.prepare: ｢
+        SELECT * FROM alerts WHERE time < ? ORDER BY time DESC
+    ｣ {
+        LEAVE .finish;
+        .execute: time - $!public-delay;
         eager .allrows(:array-of-hash).map: { P6lert::Alert.new: |$_ }
     }
 }

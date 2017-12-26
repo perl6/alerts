@@ -9,7 +9,7 @@ my $Alerts := P6lert::Model::Alerts.new;
 sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
     my $application = route {
         get -> {
-            content 'text/html', html-render-alerts $Alerts.all
+            content 'text/html', html-render-alerts $Alerts.public
         }
         get -> 'alert', UInt $id {
             content 'text/html', html-render-alerts $Alerts.get: $id
@@ -17,7 +17,7 @@ sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
 
         get -> 'api', 'v1', 'all' {
             content 'application/json', to-json {
-                alerts => $Alerts.all».TO-JSON,
+                alerts => $Alerts.public».TO-JSON,
             };
         }
 
