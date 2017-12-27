@@ -50,7 +50,7 @@ sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
         }
 
         my subset StaticContent of Str where * ∈ <
-            feed-pic.png  main.css
+            feed-pic.png  main.css  chat.svg
             rss.svg       api.svg   twitter.svg  camelia.svg
         >;
         get -> StaticContent $file { static "static/$file" }
@@ -169,18 +169,24 @@ sub html-layout-default (Str:D $content) {
       <div id="content">
         <h1>
           <a href="https://perl6.org/"><img src="/camelia.svg" alt="»ö«"
-            width=25 height=25></a>
-          <a href="/">Perl 6 Alerts</a>
-          <a href="/rss"><img src="/rss.svg" alt="RSS" width=25 height=25></a>
+            width=25 height=25 title="Perl 6"></a>
+          <a href="/" title="Perl 6 Alerts Home">Perl 6 Alerts</a>
+          <a href="/rss"><img src="/rss.svg" alt="RSS" width=25 height=25
+            title="RSS Feed"></a>
           <a href="https://twitter.com/p6lert"
-            ><img src="/twitter.svg" alt="Twitter" width=25 height=25></a>
-          <a href="/api"
-            ><img src="/api.svg" alt="API" width=25 height=25></a
+            ><img src="/twitter.svg" alt="Twitter" width=25 height=25
+            title="Follow Perl 6 Alerts on Twitter"></a>
+          <a href="/api"><img src="/api.svg" alt="API" width=25 height=25
+            title="API documentation"></a>
+          <a href="https://webchat.freenode.net/?channels=#perl6-dev"
+            ><img src="/chat.svg" alt="Chat with us" width=25 height=25
+            title="Chat with us"></a
           ><small>keeping up to date with important changes</small></h1>
         \qq[$content]
         <footer>
           <small><a href="/api">API</a> |
-            Code for this website is available at
+            <a href="https://webchat.freenode.net/?channels=#perl6-dev"
+            >💬 Chat with us</a> | Code for this website is available at
             <a href="https://github.com/perl6/alerts"
             >github.com/perl6/alerts</a></small>
         </footer>
