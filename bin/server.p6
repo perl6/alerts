@@ -29,6 +29,11 @@ sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
                 alerts => $Alerts.public».TO-JSON,
             };
         }
+        get -> 'api', 'v1', 'since', UInt $since {
+            content 'application/json', to-json {
+                alerts => $Alerts.since($since)».TO-JSON,
+            };
+        }
         get -> 'api', 'v1', 'alert', UInt $id {
             if $Alerts.get: $id -> $alert {
                 content 'application/json', to-json %(

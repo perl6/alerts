@@ -61,6 +61,16 @@ method public {
     }
 }
 
+method since (UInt:D $since) {
+    given $!dbh.prepare: ｢
+        SELECT * FROM alerts WHERE time > ? AND time < ? ORDER BY time DESC
+    ｣ {
+        LEAVE .finish;
+        .execute: $since, time - $!public-delay;
+        eager .allrows(:array-of-hash).map: { P6lert::Alert.new: |$_ }
+    }
+}
+
 method get (UInt:D $id) {
     given $!dbh.prepare: ｢SELECT * FROM alerts where id = ?｣ {
         LEAVE .finish;
