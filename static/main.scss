@@ -121,7 +121,7 @@ ul.toc {
         h2 {
             margin: 0;
             border-radius: $radius $radius 0 0;
-            padding: 20px;
+            padding: 10px 20px;
             border-bottom: 1px solid $border-color;
             font-weight: normal;
             font-size: 90%;
@@ -130,7 +130,7 @@ ul.toc {
             .sep {
                 font-weight: normal;
                 font-size: 70%;
-                vertical-align: 20%;
+                vertical-align: 10%;
                 color: $muted-text;
             }
             span {
