@@ -179,8 +179,10 @@ sub html-layout-default (Str:D $content) {
           ><small>keeping up to date with important changes</small></h1>
         \qq[$content]
         <footer>
-          <small>Code for this website is available at
-          <a href="https://github.com/perl6/alerts">github.com/perl6/alerts</a>
+          <small><a href="/api">API</a> |
+            Code for this website is available at
+            <a href="https://github.com/perl6/alerts"
+            >github.com/perl6/alerts</a></small>
         </footer>
       </div>
     </body>
