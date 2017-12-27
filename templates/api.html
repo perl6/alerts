@@ -1,0 +1,168 @@
+<a href="/" class="back-link">← back</a>
+<div class="container">
+
+<h2 id="toc">Table of Contents</h2>
+<ul class="toc">
+  <li><a href="#api-implementation">API Implementation</a></li>
+  <li><a href="#api-documentation">API Documentation</a>
+    <ul>
+      <li><a href="api-alert-object">Alert Object Structure</a></li>
+      <li><a href="api-all">All Alerts</a></li>
+      <li><a href="api-alerts-since">Alerts Since…</a></li>
+      <li><a href="#api-alert">A Specific Alert</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="api-implementation">API Implementations</h2>
+
+<p>Perl 6 implementations of this site's API exist in the form of
+  <a href="https://modules.perl6.org/repo/WWW::P6lert"><code>WWW::P6lert</code>
+    module</a> as well as a
+  <a href="https://modules.perl6.org/repo/p6lert"><code>p6lert</code> command
+    line utility</a> that lets you view new alerts on your command line.</p>
+
+<h2 id="api-documentation">API Documentation</h2>
+
+<p>This site offers its data via JSON API endpoint. You can use any HTTPS client
+  and JSON decoder. The examples on this page will use
+  <a href="https://modules.perl6.org/repo/WWW"><code>WWW</code> module</a>.</p>
+
+<h3 id="api-alert-object">Alert Object Structure</h3>
+
+The JSON object of alerts returned by all endpoints is this:
+
+<pre><code>::ESCAPE_HTML[::{
+    "id": 3,
+    "alert": "OMG!!!! STUFF IS ON FIRE!!!",
+    "severity": "critical",
+    "affects": "Rakudo 2017.12 and earlier",
+    "time": 1514320218,
+    "creator": "Zoffix Znet"
+}::]ESCAPE_HTML::</code></pre>
+
+<p>All properties are allways present.</p>
+
+<ul>
+  <li><code>id</code> - unique ID of the alert - type:
+    <code>UInt</code></li>
+  <li><code>alert</code> - full text of the alert - type:
+    <code>Str</code></li>
+  <li><code>severity</code> - severity of the alert - type:
+    <code>Str</code> with possible values of <code>info</code>,
+      <code>normal</code>, and <code>critical</code></li>
+  <li><code>time</code> - a <a
+    href="https://en.wikipedia.org/wiki/Unix_time">Unix epoch time</a> of
+    when the alert was issued - type: <code>UInt</code></li>
+  <li><code>affects</code> - free-form, possibly-empty text describing
+    what the alert affects (e.g. compiler version, parts of
+    infrastructure, etc.) - type: <code>Str</code></li>
+  <li><code>creator</code> - name of the creator of the alert, or
+    string <code>Anonymous</code> if creator is not known to the site - type:
+    <code>Str</code></li>
+</ul>
+
+<h3 id="api-all">All Alerts</h3>
+
+<p>To fetch all alerts, use
+  <a href="::SITE-HOST::api/v1/all">::SITE-HOST::api/v1/all</a>. The alert
+  objects will be available as an array in <code>alerts</code> property:</p>
+
+<pre><code>::ESCAPE_HTML[::use WWW;
+my @alerts := jget('::SITE-HOST::api/v1/all')<alerts>;
+for @alerts {
+    say join ' | ', "ID#{.<id>}", DateTime.new(.<time>),
+          "severity: {.<severity>}";
+    say join ' | ', ("affects: {.<affects>}" if .<affects>),
+          "posted by: {.<creator>}";
+    say .<alert>;
+    say();
+}
+
+# OUTPUT:
+# ID#5 | 2017-12-26T21:52:34Z | severity: info
+# affects: Rakudo 2017.12 and earlier | posted by: Zoffix Znet
+# wooots
+#
+# ID#4 | 2017-12-26T20:30:28Z | severity: info
+# affects: Rakudo 2017.12 and earlier | posted by: Zoffix Znet
+# Released some stuff
+#
+# ID#3 | 2017-12-26T20:30:18Z | severity: critical
+# affects: Rakudo 2017.12 and earlier | posted by: Zoffix Znet
+# OMG!!!! STUFF IS ON FIRE!!!::]ESCAPE_HTML::</code></pre>
+
+<h3 id="api-alerts-since">Alerts Since…</h3>
+
+<p>To fetch all alerts that were posted since a certain point of time, use
+  <a href="::SITE-HOST::api/v1/since/1414325154">::SITE-HOST::api/v1/since/$UNIX_EPOCH_TIME</a>,
+  where <code>$UNIX_EPOCH_TIME</code> is a <code>UInt</code>
+  with <a href="https://en.wikipedia.org/wiki/Unix_time">Unix epoch time</a>
+  indicating non-inclusive time since which to fetch alerts from.
+  The alert objects will be available in a possibly-empty array in
+  <code>alerts</code> property:</p>
+
+<pre><code>::ESCAPE_HTML[::use WWW;
+my $time = DateTime.now.earlier(:3days).Instant.to-posix.head.Int;
+if jget("::SITE-HOST::api/v1/since/$time").self<alerts> {
+    for @^alerts {
+        say join ' | ', "ID#{.<id>}", DateTime.new(.<time>),
+              "severity: {.<severity>}";
+        say join ' | ', ("affects: {.<affects>}" if .<affects>),
+              "posted by: {.<creator>}";
+        say .<alert>;
+        say();
+    }
+}
+else {
+    say "No new alerts since {DateTime.new: $time}";
+}
+
+# OUTPUT:
+# No new alerts since 2017-12-24T09:14:18.684577Z
+
+
+# ALERTNATIVE OUTPUT:
+# ID#5 | 2017-12-26T21:52:34Z | severity: info
+# affects: Rakudo 2017.12 and earlier | posted by: Zoffix Znet
+# wooots
+#
+# ID#4 | 2017-12-26T20:30:28Z | severity: info
+# affects: Rakudo 2017.12 and earlier | posted by: Zoffix Znet
+# Released some stuff
+::]ESCAPE_HTML::</code></pre>
+
+<h3 id="api-alert">A Specific Alert</h3>
+
+<p>To fetch a specific alert, use
+  <a href="::SITE-HOST::api/v1/alert/2">::SITE-HOST::api/v1/alert/$ALERT_ID</a>,
+  where <code>$ALERT_ID</code> is a <code>UInt</code> containing the unique ID
+  of the alert you wish to retrieve.
+  The end-point will return <code>404</code> error if alert is not found or
+  a JSON object where the alert object is available in
+  <code>alert</code> property:</p>
+
+<pre><code>::ESCAPE_HTML[::use WWW;
+my $id = prompt 'Enter alert ID to fetch: ';
+with jget("::SITE-HOST::api/v1/alert/$id")<alert> {
+    say join ' | ', "ID#{.<id>}", DateTime.new(.<time>),
+          "severity: {.<severity>}";
+    say join ' | ', ("affects: {.<affects>}" if .<affects>),
+          "posted by: {.<creator>}";
+    say .<alert>;
+}
+else {
+    $^e.exception.message.say;
+}
+
+# OUTPUT:
+# Enter alert ID to fetch: 42
+# Error 404: 404 Not Found
+
+# ALERTNATIVE OUTPUT:
+# Enter alert ID to fetch: 5
+# ID#5 | 2017-12-26T21:52:34Z | severity: info
+# affects: Rakudo 2017.12 and earlier | posted by: Zoffix Znet
+# wooots::]ESCAPE_HTML::</code></pre>
+
+</div>

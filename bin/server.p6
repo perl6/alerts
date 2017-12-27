@@ -42,6 +42,13 @@ sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
             } else { not-found }
         }
 
+        my subset TemplateContent of Str where * ∈ <
+            api
+        >;
+        get -> TemplateContent $file {
+            content 'text/html', html-render-template $file
+        }
+
         my subset StaticContent of Str where * ∈ <
             feed-pic.png  main.css
             rss.svg       api.svg   twitter.svg  camelia.svg
@@ -110,6 +117,15 @@ sub rss-render-alerts(*@alerts) {
           ✎✎✎✎✎
       })
       ~ '</channel></rss>'
+}
+
+sub html-render-template($file) {
+    state %templates;
+    html-layout-default
+        %templates{$file} //= 'templates'.IO.add("$file.html").slurp
+          .subst(:g, '::SITE-HOST::', $SITE-HOST)
+          .subst: :g, /'::ESCAPE_HTML[::' (.+?) '::]ESCAPE_HTML::'/,
+              *.[0].Str.&escape-html
 }
 
 sub html-render-alerts(*@alerts) {

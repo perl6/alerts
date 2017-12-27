@@ -1,5 +1,4 @@
 unit class P6lert::Alert;
-use HTML::Escape;
 use Subset::Helper;
 use DateTime::Format;
 

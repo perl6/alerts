@@ -2,7 +2,7 @@
 $color1: #F3F1AF;
 $color2: #F9420A;
 $color3: #AECBEB;
-$color4: #FFFFFF;
+$color4: #FaFaFa;
 $color5: #2B2B2B;
 
 $page-bg: lighten($color1, 10%);
@@ -24,13 +24,46 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+p, li, pre {
+    line-height: 1.7em;
+}
+
 #content {
     margin: 10px auto;
     max-width: 1100px;
 }
 
+.container {
+    background: $color4;
+    margin: 20px 0;
+    padding: 10px 40px;
+    border-radius: $radius;
+    border: 1px solid $border-color;
+}
+
+pre {
+    padding: 10px;
+    background: darken($color4, 5%);
+    border-radius: $radius;
+}
 code, kbd, pre, samp {
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+a {
+    color: lighten($text-color, 20%);
+    text-decoration: underline;
+}
+a:hover {
+    text-decoration: none;
+}
+
+.back-link {
+    font-size: 90%;
+    text-decoration: none;
+}
+.back-link:hover {
+    text-decoration: underline;
 }
 
 h1 {
@@ -61,6 +94,11 @@ h1 {
 
 footer, footer * {
     color: $muted-text;
+}
+
+ul.toc {
+    margin-left: 1em;
+    padding-left: 0;
 }
 
 #alerts {
