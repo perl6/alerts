@@ -10,7 +10,8 @@
         "DateTime::Format",
         "DBIish",
         "HTML::Escape",
-        "Subset::Helper"
+        "Subset::Helper",
+        "Twitter"
     ],
     "test-depends" : [
         "Testo",
