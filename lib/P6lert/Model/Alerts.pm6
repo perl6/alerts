@@ -26,14 +26,15 @@ method add (
     Str:D  $alert,
     Str:D :$creator = 'Anonymous',
     Str:D :$affects = '',
-    P6lert::Alert::Severity:D :$severity = 'normal'
+    P6lert::Alert::Severity:D :$severity = 'normal',
+    UInt:D :$time = time,
 ) {
     given $!dbh.prepare: ｢
         INSERT INTO alerts (alert, severity, affects, creator, time)
             VALUES(?, ?, ?, ?, ?)
     ｣ {
         LEAVE .finish;
-        .execute: $alert, $severity, $affects, $creator, time;
+        .execute: $alert, $severity, $affects, $creator, $time;
     }
 
     given $!dbh.prepare: ｢SELECT last_insert_rowid()｣ {
