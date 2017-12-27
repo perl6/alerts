@@ -1,10 +1,13 @@
 use lib <lib>;
 use Cro::HTTP::Router;
 use Cro::HTTP::Server;
+use HTML::Escape;
 use JSON::Fast;
 use P6lert::Model::Alerts;
 
+my $SITE-HOST = 'http://localhost:10000/'; #'https://perl6.alerts.org/';
 my $Alerts := P6lert::Model::Alerts.new;
+my &H := &escape-html;
 
 sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
     my $application = route {
@@ -15,12 +18,17 @@ sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
             content 'text/html', html-render-alerts $Alerts.get: $id
         }
 
+
+        get -> $ where <feed  atom  rss>.any {
+            content 'application/xml', rss-render-alerts $Alerts.public
+        };
+
+
         get -> 'api', 'v1', 'all' {
             content 'application/json', to-json {
                 alerts => $Alerts.public».TO-JSON,
             };
         }
-
         get -> 'api', 'v1', 'alert', UInt $id {
             if $Alerts.get: $id -> $alert {
                 content 'application/json', to-json %(
@@ -29,11 +37,11 @@ sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
             } else { not-found }
         }
 
-        get -> 'main.css'    { static 'static/main.css'    }
-        get -> 'rss.svg'     { static 'static/rss.svg'     }
-        get -> 'api.svg'     { static 'static/api.svg'     }
-        get -> 'twitter.svg' { static 'static/twitter.svg' }
-        get -> 'camelia.svg' { static 'static/camelia.svg' }
+        my subset StaticContent of Str where * ∈ <
+            feed-pic.png  main.css
+            rss.svg       api.svg   twitter.svg  camelia.svg
+        >;
+        get -> StaticContent $file { static "static/$file" }
     }
 
     with Cro::HTTP::Server.new: :$host, :$port, :$application {
@@ -44,6 +52,59 @@ sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
             exit;
         }
     }
+}
+
+sub rss-render-alerts(*@alerts) {
+    q:to/✎✎✎✎✎/
+    <?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+      xmlns:content="http://purl.org/rss/1.0/modules/content/"
+      xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+      xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xmlns:atom="http://www.w3.org/2005/Atom"
+      xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+      xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+      xmlns:georss="http://www.georss.org/georss" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:media="http://search.yahoo.com/mrss/"
+      >
+      <channel>
+      	<title>Perl 6 Alerts</title>
+      	<atom:link href="\qq[$SITE-HOST]feed/" rel="self" type="application/rss+xml" />
+      	<link>\qq[$SITE-HOST]</link>
+      	<description>Alerts from Rakudo Perl 6 Core Developers</description>
+      	<lastBuildDate>\qq[@alerts.head.time-rss()]</lastBuildDate>
+      	<language>en</language>
+          <image>
+      		<url>\qq[$SITE-HOST]feed-pic.png</url>
+      		<title>Perl 6 Alerts</title>
+      		<link>\qq[$SITE-HOST]</link>
+      	</image>
+    ✎✎✎✎✎
+    ~ @alerts.map(-> $a {
+          q:to/✎✎✎✎✎/
+          	<item>
+          		<title><![CDATA[\qq[&H($a.alert-short)]]]></title>
+          		<link>\qq[$SITE-HOST]alert/\qq[$a.id()]</link>
+          		<pubDate>\qq[$a.time-rss()]</pubDate>
+          		<guid isPermaLink="true">\qq[$SITE-HOST]alert/\qq[$a.id()]</guid>
+          		<description><![CDATA[
+                  <h2><a href="\qq[$SITE-HOST]alert/\qq[$a.id()]">#\qq[$a.id()]</a>
+                    <span class="sep">|</span>
+                      <span class="time">\qq[$a.time-human()]</span>
+                    <span class="sep">|</span>
+                      severity: <span class="severity">\qq[$a.severity()]</span>
+                    \qq[{
+                        '<span class="sep">|</span>
+                        affects: <span class="affects">\qq[&H($a.affects)]</span>'
+                        if $a.affects
+                    }]
+                    <span class="sep">|</span>
+                      posted by <span class="creator">\qq[&H($a.creator)]</span>
+                  </h2>
+                  \qq[&H($a.alert)]
+              ]]></description>
+          	</item>
+          ✎✎✎✎✎
+      })
+      ~ '</channel></rss>'
 }
 
 sub html-render-alerts(*@alerts) {
@@ -58,14 +119,14 @@ sub html-render-alerts(*@alerts) {
                 severity: <span class="severity">\qq[$a.severity()]</span>
               \qq[{
                   '<span class="sep">|</span>
-                    affects: <span class="affects">\qq[$a.affects()]</span>'
+                    affects: <span class="affects">\qq[&H($a.affects)]</span>'
                   if $a.affects
               }]
               <span class="sep">|</span>
-                posted by <span class="creator">\qq[$a.creator()]</span>
+                posted by <span class="creator">\qq[&H($a.creator)]</span>
             </h2>
 
-            <p>\qq[$a.alert()]</p>
+            <p>\qq[&H($a.alert)]</p>
           </li>
           ✎✎✎✎✎
       }) ~ '</ul>'

@@ -1,5 +1,7 @@
 unit class P6lert::Alert;
+use HTML::Escape;
 use Subset::Helper;
+use DateTime::Format;
 
 subset Severity of Str where subset-is * ∈ <info  normal  critical>,
     'Invalid alert severity value. Must be one of <info  normal  critical>';
@@ -13,6 +15,13 @@ has Severity:D $.severity is required;
 
 method time-human {
     DateTime.new($!time).Date
+}
+method time-rss {
+    strftime '%a, %d %b %Y %H:%M:%S %z', DateTime.new: $!time
+}
+
+method alert-short {
+    $!alert.chars > 60 ?? $!alert.substr(0, 60) ~ ' […]' !! $!alert;
 }
 
 method TO-JSON { self.Capture }

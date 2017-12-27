@@ -7,7 +7,9 @@
     "tags"         : [ "core dev" ],
     "depends"      : [
         "Cro",
+        "DateTime::Format",
         "DBIish",
+        "HTML::Escape",
         "Subset::Helper"
     ],
     "test-depends" : [
