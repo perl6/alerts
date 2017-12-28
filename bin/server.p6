@@ -186,8 +186,9 @@ sub html-layout-default (Str:D $content) {
         <footer>
           <small><a href="/api">API</a> |
             <a href="https://webchat.freenode.net/?channels=#perl6-dev"
-            >💬 Chat with us</a> | Code for this website is available at
-            <a href="https://github.com/perl6/alerts"
+            >💬 Chat with us</a> |
+            <a href="http://mi.cro.services">Powered by Cro</a> | Code for this website is
+            available at<a href="https://github.com/perl6/alerts"
             >github.com/perl6/alerts</a></small>
         </footer>
       </div>
