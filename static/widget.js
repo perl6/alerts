@@ -10,10 +10,16 @@ document.write('<div id="p6lert"></div>');
           var p6lert = document.getElementById('p6lert');
             p6lert.style = 'border: 1px solid #ccc; border-radius: 4px;'
               + ' display: inline-block; padding: 5px; max-width: 800px';
+          var p6lerts_a = document.createElement('a');
+            p6lerts_a.style = 'color: #333';
+            p6lerts_a.href = host;
+            p6lerts_a.textContent = 'Perl 6 Alerts';
           var title = document.createElement('p');
             title.style = 'font-weight: bold; margin: 0;';
-            title.textContent = 'Latest Perl 6 Alerts';
+            title.appendChild(document.createTextNode('Latest '));
+            title.appendChild(p6lerts_a);
             p6lert.appendChild(title);
+
           var container = document.createElement('ul');
             container.style = 'margin: 0; padding: 0; list-style: none;';
             p6lert.appendChild(container);
