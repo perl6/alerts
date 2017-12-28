@@ -144,6 +144,9 @@ ul.toc {
         }
     }
 
+    .alert-low  h2 { background: lighten($alert-normal-bg, 5%); }
+    .alert-high h2 { background: darken($alert-normal-bg, 5%); }
+
     .alert-info h2 { background: $alert-info-bg }
     .alert-critical {
         h2, h2 *, h2 .sep {
