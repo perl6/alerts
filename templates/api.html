@@ -50,8 +50,8 @@ The JSON object of alerts returned by all endpoints is this:
   <li><code>alert</code> - full text of the alert - type:
     <code>Str</code></li>
   <li><code>severity</code> - severity of the alert - type:
-    <code>Str</code> with possible values of <code>info</code>,
-      <code>normal</code>, and <code>critical</code></li>
+    <code>Str</code> with possible values of <code>info</code>, <code>low</code>
+      <code>normal</code>, <code>high</code>, and <code>critical</code></li>
   <li><code>time</code> - a <a
     href="https://en.wikipedia.org/wiki/Unix_time">Unix epoch time</a> of
     when the alert was issued - type: <code>UInt</code></li>
@@ -186,6 +186,7 @@ else {
 [class^="p6lert-severity"] - severity info
 [class^="p6lert-severity"] span - severity info's "severity: " label (hidden by default)
     .p6lert-affects-info     -- "info" severity
+    .p6lert-affects-low      -- "low" severity
     .p6lert-affects-normal   -- "normal" severity
     .p6lert-affects-high     -- "high" severity
     .p6lert-affects-critical -- "critical" severity
