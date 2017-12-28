@@ -25,16 +25,19 @@ sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
 
 
         get -> 'api', 'v1', 'all' {
+            header 'Access-Control-Allow-Origin', '*';
             content 'application/json', to-json {
                 alerts => $Alerts.public».TO-JSON,
             };
         }
         get -> 'api', 'v1', 'since', UInt $since {
+            header 'Access-Control-Allow-Origin', '*';
             content 'application/json', to-json {
                 alerts => $Alerts.since($since)».TO-JSON,
             };
         }
         get -> 'api', 'v1', 'alert', UInt $id {
+            header 'Access-Control-Allow-Origin', '*';
             if $Alerts.get: $id -> $alert {
                 content 'application/json', to-json %(
                     alert => $alert.TO-JSON
@@ -50,8 +53,8 @@ sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
         }
 
         my subset StaticContent of Str where * ∈ <
-            feed-pic.png  main.css  chat.svg
-            rss.svg       api.svg   twitter.svg  camelia.svg
+            main.css  widget.js  feed-pic.png  chat.svg
+            rss.svg   api.svg    twitter.svg   camelia.svg
         >;
         get -> StaticContent $file { static "static/$file" }
     }

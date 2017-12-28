@@ -12,6 +12,7 @@
       <li><a href="#api-alert">A Specific Alert</a></li>
     </ul>
   </li>
+  <li><a href="#widget">JavaScript Widget</a>
 </ul>
 
 <h2 id="api-implementation">API Implementations</h2>
@@ -164,5 +165,32 @@ else {
 # ID#5 | 2017-12-26T21:52:34Z | severity: info
 # affects: Rakudo 2017.12 and earlier | posted by: Zoffix Znet
 # wooots::]ESCAPE_HTML::</code></pre>
+
+<h2 id="widget">JavaScript Widget</h2>
+
+<p>You can embed this JavaScript widget on your website to show latest Perl&nbsp;6 alerts:</p>
+
+<pre><code>::ESCAPE_HTML[::<script src="::SITE-HOST::widget.js"></script>::]ESCAPE_HTML::</code></pre>
+
+<p>The widget will look like this:</p>
+
+<script src="::SITE-HOST::widget.js"></script>
+
+<p>You can apply custom styling using these CSS selectors:</p>
+
+<pre><code>::ESCAPE_HTML[::#p6lert - <div> surrounding the widget
+#p6lert ul - the list of alerts
+#p6lert li - individual alert
+.p6lert-info-bar - alert's info bar (ID, severity, and 'affects' info)
+.p6lert-info-bar - alert's info bar (ID, severity, and 'affects' info)
+[class^="p6lert-severity"] - severity info
+[class^="p6lert-severity"] span - severity info's "severity: " label (hidden by default)
+    .p6lert-affects-info     -- "info" severity
+    .p6lert-affects-normal   -- "normal" severity
+    .p6lert-affects-high     -- "high" severity
+    .p6lert-affects-critical -- "critical" severity
+.p6lert-affects - "affects" info
+.p6lert-affects span - "affects" info's "affects: " label
+#p6lert p - alert text itself::]ESCAPE_HTML::</code></pre>
 
 </div>
