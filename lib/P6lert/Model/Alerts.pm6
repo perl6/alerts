@@ -93,6 +93,16 @@ method public {
     }
 }
 
+method last(UInt $last where * < 1_000_000) { # arbitrary upper limit
+    given $!dbh.prepare: ｢
+        SELECT * FROM alerts WHERE time < ? ORDER BY time DESC LIMIT ?
+    ｣ {
+        LEAVE .finish;
+        .execute: time - $!public-delay, $last;
+        eager .allrows(:array-of-hash).map: { P6lert::Alert.new: |$_ }
+    }
+}
+
 method since (UInt:D $since) {
     given $!dbh.prepare: ｢
         SELECT * FROM alerts WHERE time > ? AND time < ? ORDER BY time DESC

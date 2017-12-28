@@ -6,9 +6,10 @@
   <li><a href="#api-implementation">API Implementation</a></li>
   <li><a href="#api-documentation">API Documentation</a>
     <ul>
-      <li><a href="api-alert-object">Alert Object Structure</a></li>
-      <li><a href="api-all">All Alerts</a></li>
-      <li><a href="api-alerts-since">Alerts Since…</a></li>
+      <li><a href="#api-alert-object">Alert Object Structure</a></li>
+      <li><a href="#api-all">All Alerts</a></li>
+      <li><a href="#api-last">Last N Alerts</a></li>
+      <li><a href="#api-alerts-since">Alerts Since…</a></li>
       <li><a href="#api-alert">A Specific Alert</a></li>
     </ul>
   </li>
@@ -93,6 +94,33 @@ for @alerts {
 # affects: Rakudo 2017.12 and earlier | posted by: Zoffix Znet
 # OMG!!!! STUFF IS ON FIRE!!!::]ESCAPE_HTML::</code></pre>
 
+<h3 id="api-last">Last N Alerts</h3>
+
+<p>To fetch most recent N alerts, use
+  <a href="::SITE-HOST::api/v1/last/5">::SITE-HOST::api/v1/last/$N</a>, where <code>$N</code>
+  is a <code>UInt</code> below 1,000,000 indicating how many most recent alerts you want to fetch.
+  The alert objects will be available as an array in <code>alerts</code> property:</p>
+
+<pre><code>::ESCAPE_HTML[::use WWW;
+my @alerts := jget('::SITE-HOST::api/v1/last/2')<alerts>;
+for @alerts {
+    say join ' | ', "ID#{.<id>}", DateTime.new(.<time>),
+          "severity: {.<severity>}";
+    say join ' | ', ("affects: {.<affects>}" if .<affects>),
+          "posted by: {.<creator>}";
+    say .<alert>;
+    say();
+}
+
+# OUTPUT:
+# ID#5 | 2017-12-26T21:52:34Z | severity: info
+# affects: Rakudo 2017.12 and earlier | posted by: Zoffix Znet
+# wooots
+#
+# ID#4 | 2017-12-26T20:30:28Z | severity: info
+# affects: Rakudo 2017.12 and earlier | posted by: Zoffix Znet
+# Released some stuff::]ESCAPE_HTML::</code></pre>
+
 <h3 id="api-alerts-since">Alerts Since…</h3>
 
 <p>To fetch all alerts that were posted since a certain point of time, use
@@ -176,7 +204,8 @@ else {
 
 <script src="::SITE-HOST::widget.js"></script>
 
-<p>You can apply custom styling using these CSS selectors:</p>
+<p>You can apply custom styling using these CSS selectors (you may need to apply
+<code>!important</code> to some rules, to override the inline styles provided by the widget):</p>
 
 <pre><code>::ESCAPE_HTML[::#p6lert - <div> surrounding the widget
 #p6lert ul - the list of alerts
@@ -193,5 +222,10 @@ else {
 .p6lert-affects - "affects" info
 .p6lert-affects span - "affects" info's "affects: " label
 #p6lert p - alert text itself::]ESCAPE_HTML::</code></pre>
+
+<p>The widget fetches 10 most recent alerts. This amount is not configurable, although you
+can use CSS to display fewer alerts:</p>
+
+<pre><code>::ESCAPE_HTML[::#p6lert li:nth-child(n+4) { display: none; } /* show only 3 alerts */::]ESCAPE_HTML::</code></pre>
 
 </div>

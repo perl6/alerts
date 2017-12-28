@@ -2,7 +2,7 @@ document.write('<div id="p6lert"></div>');
 (function () {
   var host = 'http://localhost:10000/';
   var ajax = new XMLHttpRequest();
-  ajax.open('GET', host + 'api/v1/all', true);
+  ajax.open('GET', host + 'api/v1/last/10', true);
   ajax.onreadystatechange = function() {
       if (ajax.readyState == 4 && ajax.status == 200) {
           var alerts = JSON.parse(ajax.responseText);

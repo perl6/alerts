@@ -30,6 +30,12 @@ sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
                 alerts => $Alerts.public».TO-JSON,
             };
         }
+        get -> 'api', 'v1', 'last', UInt $last where * < 1_000_000 { # arbitrary upper limit
+            header 'Access-Control-Allow-Origin', '*';
+            content 'application/json', to-json {
+                alerts => $Alerts.last($last)».TO-JSON,
+            };
+        }
         get -> 'api', 'v1', 'since', UInt $since {
             header 'Access-Control-Allow-Origin', '*';
             content 'application/json', to-json {
