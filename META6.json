@@ -10,6 +10,7 @@
         "DateTime::Format",
         "DBIish",
         "HTML::Escape",
+        "IRC::Client",
         "OO::Monitors",
         "Subset::Helper",
         "Twitter"

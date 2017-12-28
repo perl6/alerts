@@ -47,14 +47,14 @@ method add (
 }
 
 method update (UInt:D $id,
-    Str  $alert-text,
+    Str  $alert-text?,
     Str :$creator,
     Str :$affects,
     P6lert::Alert::Severity :$severity,
     UInt :$time,
     Bool :$tweeted,
 ) {
-    my $alert = self.get: $id or return;
+    my $alert = self.get: $id or die "No alert with ID $id";
 
     my %values = $alert.Capture.Hash;
     %values<alert>    = $_ with $alert-text;
@@ -66,11 +66,11 @@ method update (UInt:D $id,
     $alert .= clone: |%values;
 
     given $!dbh.prepare: ｢
-        UPDATE INTO alerts (alert, severity, affects, creator, time, tweeted)
-            VALUES(?, ?, ?, ?, ?, ?)
-    ｣ {
-        LEAVE .finish;
-        .execute: .alert, .severity, .affects, .creator, .time, .tweeted with $alert;
+        UPDATE alerts SET alert = ?, severity = ?, affects = ?, creator = ?, time = ?, tweeted = ?
+            WHERE id = ?
+    ｣ -> $sth {
+        LEAVE $sth.finish;
+        $sth.execute: .alert, .severity, .affects, .creator, .time, .tweeted, .id with $alert;
     }
     $alert
 }
