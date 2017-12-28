@@ -42,6 +42,10 @@ method add (
     $id
 }
 
+method update ($alert-text) {
+    $!alerts.update: $alert-text, |%_;
+}
+
 method !tweet($id) {
     my $alert := $!alerts.get: $id;
     return if not $alert or $alert.tweeted;
