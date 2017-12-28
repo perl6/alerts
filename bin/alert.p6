@@ -1,6 +1,7 @@
 use lib <lib>;
 use P6lert;
 
+my %*SUB-MAIN-OPTS = :named-anywhere;
 sub MAIN(
     $alert,
     :$creator, :$affects, :$severity = 'normal',
