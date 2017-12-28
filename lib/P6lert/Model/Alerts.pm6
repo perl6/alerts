@@ -16,7 +16,8 @@ submethod TWEAK {
             severity  TEXT NOT NULL DEFAULT 'normal',
             affects   TEXT NOT NULL DEFAULT '',
             creator   TEXT NOT NULL DEFAULT 'Anonymous',
-            time      INTEGER NOT NULL
+            time      INTEGER NOT NULL,
+            tweeted   INTEGER NOT NULL DEFAULT 0
         );
     ｣;
 }
@@ -28,13 +29,14 @@ method add (
     Str:D :$affects = '',
     P6lert::Alert::Severity:D :$severity = 'normal',
     UInt:D :$time = time,
+    Bool:D :$tweeted = False,
 ) {
     given $!dbh.prepare: ｢
-        INSERT INTO alerts (alert, severity, affects, creator, time)
-            VALUES(?, ?, ?, ?, ?)
+        INSERT INTO alerts (alert, severity, affects, creator, time, tweeted)
+            VALUES(?, ?, ?, ?, ?, ?)
     ｣ {
         LEAVE .finish;
-        .execute: $alert, $severity, $affects, $creator, $time;
+        .execute: $alert, $severity, $affects, $creator, $time, $tweeted;
     }
 
     given $!dbh.prepare: ｢SELECT last_insert_rowid()｣ {
@@ -42,6 +44,35 @@ method add (
         .execute;
         .row.head.Int
     }
+}
+
+method update (UInt:D $id,
+    Str  $alert-text,
+    Str :$creator,
+    Str :$affects,
+    P6lert::Alert::Severity :$severity,
+    UInt :$time,
+    Bool :$tweeted,
+) {
+    my $alert = self.get: $id or return;
+
+    my %values = $alert.Capture.Hash;
+    %values<alert>    = $_ with $alert-text;
+    %values<creator>  = $_ with $creator;
+    %values<affects>  = $_ with $affects;
+    %values<severity> = $_ with $severity;
+    %values<time>     = $_ with $time;
+    %values<tweeted>  = $_ with $tweeted;
+    $alert .= clone: |%values;
+
+    given $!dbh.prepare: ｢
+        UPDATE INTO alerts (alert, severity, affects, creator, time, tweeted)
+            VALUES(?, ?, ?, ?, ?, ?)
+    ｣ {
+        LEAVE .finish;
+        .execute: .alert, .severity, .affects, .creator, .time, .tweeted with $alert;
+    }
+    $alert
 }
 
 method all {

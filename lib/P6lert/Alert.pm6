@@ -11,6 +11,9 @@ has UInt:D     $.time     is required;
 has Str:D      $.creator  is required;
 has Str:D      $.affects  is required;
 has Severity:D $.severity is required;
+has Bool:D     $.tweeted  is required;
+
+method new { $_ = ?$_  with %_<tweeted>; self.bless: |%_ }
 
 method time-human {
     DateTime.new($!time).Date
@@ -23,4 +26,4 @@ method alert-short {
     $!alert.chars > 60 ?? $!alert.substr(0, 60) ~ ' […]' !! $!alert;
 }
 
-method TO-JSON { self.Capture }
+method TO-JSON { self.Capture.Hash<id  alert  time  creator  affects  severity>:p.Hash }
