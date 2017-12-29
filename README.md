@@ -24,8 +24,12 @@ if needed.
 
 The brackets for `affects` are mandatory and `severity` must come before
 `affects`. Both are optional and `severity` defaults to `normal`, while
-`affects` defaults to an empty string. If you need a reminder, you can always
-issue `help` command to the bot:
+`affects` defaults to an empty string. See [P6lert blog
+post](https://rakudo.party/post/Announcing-P6lert-Your-Direct-Connection-to-Perl-6-Core-Developers)
+to get the idea for what severity values are meant to mean.
+
+If you need a reminder of command syntax, you can always issue `help` command
+to the bot:
 
 ```
 <Zoffix> p6lert: help
