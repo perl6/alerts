@@ -1,6 +1,6 @@
 document.write('<div id="p6lert"></div>');
 (function () {
-  var host = 'http://localhost:10000/';
+  var host = 'https://alerts.perl6.org/';
   var ajax = new XMLHttpRequest();
   ajax.open('GET', host + 'api/v1/last/10', true);
   ajax.onreadystatechange = function() {
