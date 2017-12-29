@@ -8,7 +8,7 @@ my SetHash $admin-list   .= new: |%conf<admin-list>;
 subset AdminMessage where {.host ∈ $admin-list};
 my $alert-re = rx:i/
     [ 'severity:' $<severity>=\S+ \s+]?
-    [ 'affects:[' $<affects>=<-[\]]>+ ']' \s+]?
+    [ 'affects:[' $<affects>=<-[\]]>* ']' \s+]?
     $<alert>=.+
 /;
 
