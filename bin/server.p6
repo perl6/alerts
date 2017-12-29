@@ -5,7 +5,7 @@ use HTML::Escape;
 use JSON::Fast;
 use P6lert::Model::Alerts;
 
-my $SITE-HOST = 'https://perl6.alerts.org/';
+my $SITE-HOST = 'https://alerts.perl6.org/';
 my $Alerts := P6lert::Model::Alerts.new;
 my &H := &escape-html;
 
