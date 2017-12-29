@@ -5,11 +5,11 @@ use HTML::Escape;
 use JSON::Fast;
 use P6lert::Model::Alerts;
 
-my $SITE-HOST = 'http://localhost:10000/'; #'https://perl6.alerts.org/';
+my $SITE-HOST = 'https://perl6.alerts.org/';
 my $Alerts := P6lert::Model::Alerts.new;
 my &H := &escape-html;
 
-sub MAIN (Str:D :$host = 'localhost', UInt:D :$port = 10000) {
+sub MAIN (Str:D :$host = '0.0.0.0', UInt:D :$port = 10000) {
     my $application = route {
         get -> {
             content 'text/html', html-render-alerts $Alerts.public
