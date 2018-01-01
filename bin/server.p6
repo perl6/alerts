@@ -19,8 +19,8 @@ sub MAIN (Str:D :$host = '0.0.0.0', UInt:D :$port = 10000) {
         }
 
 
-        get -> $ where <feed  atom  rss>.any {
-            content 'application/xml', rss-render-alerts $Alerts.public
+        get -> $self where <feed  atom  rss>.any {
+            content 'application/xml', rss-render-alerts $self, $Alerts.public
         };
 
 
@@ -75,7 +75,7 @@ sub MAIN (Str:D :$host = '0.0.0.0', UInt:D :$port = 10000) {
     }
 }
 
-sub rss-render-alerts(*@alerts) {
+sub rss-render-alerts($self, *@alerts) {
     q:to/✎✎✎✎✎/
     <?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
       xmlns:content="http://purl.org/rss/1.0/modules/content/"
@@ -88,7 +88,7 @@ sub rss-render-alerts(*@alerts) {
       >
       <channel>
       	<title>Perl 6 Alerts</title>
-      	<atom:link href="\qq[$SITE-HOST]feed/" rel="self" type="application/rss+xml" />
+      	<atom:link href="\qq[$SITE-HOST$self]" rel="self" type="application/rss+xml" />
       	<link>\qq[$SITE-HOST]</link>
       	<description>Alerts from Rakudo Perl 6 Core Developers</description>
       	<lastBuildDate>\qq[@alerts.head.time-rss()]</lastBuildDate>
