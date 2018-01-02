@@ -120,7 +120,7 @@ sub rss-render-alerts($self, *@alerts) {
                     <span class="sep">|</span>
                       posted by <span class="creator">\qq[&H($a.creator)]</span>
                   </h2>
-                  \qq[&H($a.alert)]
+                  \qq[&linkify(&H($a.alert))]
               ]]></description>
           	</item>
           ✎✎✎✎✎
@@ -156,7 +156,7 @@ sub html-render-alerts(*@alerts) {
                 posted by <span class="creator">\qq[&H($a.creator)]</span>
             </h2>
 
-            <p>\qq[&H($a.alert)]</p>
+            <p>\qq[&linkify(&H($a.alert))]</p>
           </li>
           ✎✎✎✎✎
       }) ~ '</ul>'
@@ -204,4 +204,8 @@ sub html-layout-default (Str:D $content) {
     </body>
     </html>
     ✎✎✎✎✎
+}
+
+sub linkify (Str:D $text --> Str:D) {
+    $text.subst: :g, /'http' s? '://' \S+ \. \S+/, { qq{<a href="$_">$_\</a>} }
 }
