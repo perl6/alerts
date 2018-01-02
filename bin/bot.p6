@@ -62,4 +62,14 @@ class P6Lert::IRC::Plugin {
         (try $!alerter.delete: $alert.id) or return "Error: $!";
         "Deleted alert ID $<id>" ~ (" Note: this already was already tweeted." if $alert.tweeted);
     }
+
+    multi method irc-to-me(AdminMessage $ where rx:i/
+        ^\s* append \s+ $<id>=\d+ \s+ $<append>=.+
+    /) {
+        my $alert = $!alerter.get: +$<id> or return "No alert with ID $<id>";
+        (try $!alerter.append: $alert.id, ~$<append>) or return "Error: $!";
+        "Appended text to alert $!alerter.alert-url()/$<id>" ~ (
+            " Note: this already was already tweeted." if $alert.tweeted
+        );
+    }
 }.new;

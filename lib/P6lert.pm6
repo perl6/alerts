@@ -7,7 +7,7 @@ use Twitter;
 
 has IO::Path:D $.db-file = 'alerts.sqlite.db'.IO;
 has UInt $.public-delay;
-has P6lert::Model::Alerts:D $.alerts handles <get update delete>
+has P6lert::Model::Alerts:D $.alerts handles <get update delete append>
     = P6lert::Model::Alerts.new: :$!db-file, |(:$!public-delay with $!public-delay);
 
 has Str:D $.alert-url = 'https://alerts.perl6.org/alert';

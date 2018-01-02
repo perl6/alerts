@@ -71,6 +71,17 @@ be deleted by the bot.
 <Zoffix> p6lert, delete 5
 ```
 
+### `append`
+
+Takes an alert ID and some text to append to alert text for the alert under
+that ID. Generally alerts should be kept rather small and this command is
+a semi-emergency hatch to append a bit of extra text that doesn't fit into
+a single IRC text message.
+
+```
+<Zoffix> p6lert, append 5 some extra text
+```
+
 ###
 
 ## DEVELOPMENT

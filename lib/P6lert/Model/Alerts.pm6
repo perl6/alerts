@@ -46,6 +46,16 @@ method add (
     }
 }
 
+method append (UInt:D $id, Str $extra-text) {
+    my $alert = self.get: $id or die "No alert with ID $id";
+    $alert .= clone: :alert("$alert.alert() $extra-text");
+    given $!dbh.prepare: ｢UPDATE alerts SET alert = ? WHERE id = ?｣ -> $sth {
+        LEAVE $sth.finish;
+        $sth.execute: .alert, .id with $alert;
+    }
+    $alert;
+}
+
 method update (UInt:D $id,
     Str  $alert-text?,
     Str :$creator,
