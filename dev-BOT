@@ -1,0 +1,2 @@
+#!/bin/bash
+P6LERT_IRC_HOST=localhost P6LERT_DEBUG=1 perl6 bin/bot.p6
