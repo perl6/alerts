@@ -81,6 +81,22 @@ The styles are in `static/main.scss`. You'll need to run `./sassify` to
 have [SASS preprocessor](http://sass-lang.com/) watch for changes and
 generate CSS styles for the site.
 
+### IRC Bot development mode
+
+Use `./dev-BOT` script to power on the bot in dev mode. It'll start the bot
+with `P6LERT_IRC_HOST=localhost` and `P6LERT_DEBUG=1` env vars. The available
+vars are:
+
+* `P6LERT_IRC_HOST`—Specifies the IRC server host to connect to
+* `P6LERT_DEBUG`—Enables debug mode, which:
+    * Sets alerter URL to `http://localhost:10000/alert`
+    * Joins `#zofbot` IRC channel instead of the usual set
+    * Disables tweeting by default
+    * Reduces delay before alerts go public to 60 seconds (only affects the
+        time when they get tweeted out)
+* `P6LERT_DEBUG_DO_TWEET`—Enables debug mode tweeting. **This includes
+    re-tweeting untweeted alerts from the database on load.**
+
 ### IRC Bot Admins
 
 Admins are allowed to post/update/delete alerts. Their hosts are stored in

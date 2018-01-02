@@ -12,6 +12,9 @@ my $alert-re = rx:i/
     $<alert>=.+
 /;
 
+my $tweet = True;
+$tweet = False if %*ENV<P6LERT_DEBUG> and not %*ENV<P6LERT_DEBUG_DO_TWEET>;
+
 .run with IRC::Client.new:
     :nick<p6lert>,
     :username<p6lert-zofbot>,
@@ -26,7 +29,7 @@ class P6Lert::IRC::Plugin {
         |(:alert-url<http://localhost:10000/alert> if %*ENV<P6LERT_DEBUG>),
         |(:60public-delay if %*ENV<P6LERT_DEBUG>);
 
-    submethod TWEAK { $!alerter.retweet }
+    submethod TWEAK { $tweet and $!alerter.retweet }
 
     multi method irc-to-me ($ where /^ \s* 'help' \s* '?'? \s* $/) {
         ｢https://github.com/perl6/alerts P6lert commands: [insta]?add ALERT, update ID ALERT, ｣
@@ -35,7 +38,7 @@ class P6Lert::IRC::Plugin {
     multi method irc-to-me(AdminMessage $e where
       rx:i/^\s* [$<insta>=insta]? add \s+ $<alert>=<$alert-re>/
     ) {
-        my $id = try $!alerter.add: ~$<alert><alert>, :tweet, :creator($e.nick.subst: /'_'+ $/, ''),
+        my $id = try $!alerter.add: ~$<alert><alert>, :$tweet, :creator($e.nick.subst: /'_'+ $/, ''),
                     |(:affects(~$_)  with $<alert><affects> ),
                     |(:severity(~$_) with $<alert><severity>),
                     |(:time(time - 62*10) if $<insta>);
@@ -47,7 +50,7 @@ class P6Lert::IRC::Plugin {
     ) {
         my $alert = $!alerter.get: +$<id> or return "No alert with ID $<id>";
         (try $!alerter.update:
-            +$<id>, ~$<alert><alert>, :tweet, :creator($e.nick.subst: /'_'+ $/, ''),
+            +$<id>, ~$<alert><alert>, :$tweet, :creator($e.nick.subst: /'_'+ $/, ''),
                     |(:affects(~$_)  with $<alert><affects> ),
                     |(:severity(~$_) with $<alert><severity>)
         ) or return "Error: $!";
