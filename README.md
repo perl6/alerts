@@ -28,6 +28,9 @@ The brackets for `affects` are mandatory and `severity` must come before
 post](https://rakudo.party/post/Announcing-P6lert-Perl-6-Alerts-Directly-From-Core-Developers)
 to get the idea for what severity values are meant to mean.
 
+The `http://` and `https://` links will automatically be made clickable
+on the website.
+
 If you need a reminder of command syntax, you can always issue `help` command
 to the bot:
 
