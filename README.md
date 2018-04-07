@@ -41,6 +41,14 @@ to the bot:
     ALERT format: ['severity:'\S+]? ['affects:['<-[\]]>+']']? ALERT_TEXT
 ```
 
+##### Available severity levels
+
+- info
+- low
+- normal
+- high
+- critical
+
 ### `instadd`
 
 Exactly the same as `add` command, except it does not have a 10-minute grace
